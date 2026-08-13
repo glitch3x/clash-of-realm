@@ -204,7 +204,18 @@ class SolanaService {
         targetX = Math.round(targetX); targetY = Math.round(targetY);
         
         class Node {
-            constructor(public x: number, public y: number, public g: number, public h: number, public parent: Node | null) {}
+            x: number;
+            y: number;
+            g: number;
+            h: number;
+            parent: Node | null;
+            constructor(x: number, y: number, g: number, h: number, parent: Node | null) {
+                this.x = x;
+                this.y = y;
+                this.g = g;
+                this.h = h;
+                this.parent = parent;
+            }
             get f() { return this.g + this.h; }
         }
         
@@ -1011,34 +1022,6 @@ class SolanaService {
         }
     }
 
-    async getAlliances(): Promise<Alliance[]> {
-        return [...this.alliances];
-    }
-
-    async createAlliance(pubkey: string, name: string): Promise<boolean> {
-        // Simple logic: one alliance per player
-        const existing = this.alliances.find(a => a.members.includes(pubkey));
-        if (existing) return false;
-
-        this.alliances.push({
-            id: `Ally_${Date.now()}`,
-            name,
-            members: [pubkey]
-        });
-        return true;
-    }
-
-    async joinAlliance(pubkey: string, allianceId: string): Promise<boolean> {
-        const existing = this.alliances.find(a => a.members.includes(pubkey));
-        if (existing) return false;
-
-        const alliance = this.alliances.find(a => a.id === allianceId);
-        if (alliance) {
-            alliance.members.push(pubkey);
-            return true;
-        }
-        return false;
-    }
 }
 
 export const solanaService = new SolanaService();

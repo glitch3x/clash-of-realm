@@ -171,7 +171,7 @@ const joinAlliance = async (id: string) => {
     }
 }
 
-const leaveAlliance = async (id: string) => {
+const leaveAlliance = async (_id: string) => {
     if (myKingdom.value) {
         const success = await solanaService.leaveAlliance(myKingdom.value.pubkey);
         if (success) {

@@ -182,7 +182,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted, reactive } from 'vue'
-import { solanaService, type ECSComponent, type Buildings, type ArmyUnits, type BattleReport } from '../services/SolanaService'
+import { solanaService, type ECSComponent, type Buildings, type ArmyUnits } from '../services/SolanaService'
 
 const boardContainer = ref<HTMLElement | null>(null)
 const gameCanvas = ref<HTMLCanvasElement | null>(null)
@@ -541,8 +541,6 @@ const onWheel = (e: WheelEvent) => {
 }
 
 const recenter = () => {
-  if (!gameCanvas.value) return
-  let targetX = mapSize / 2;
   if (!gameCanvas.value) return;
   
   let target = onChainEntities.value.find(e => e.pubkey === solanaService.activePlayerPubkey);
@@ -793,6 +791,7 @@ const draw = () => {
             for (let i = 0; i < Math.min(5, entity.army.guardian); i++) troopSprites.push({img: guardianImg, fallback: '💂'});
             
             troopSprites.forEach((troop, index) => {
+                if (!ctx) return;
                 // Scatter them inside the army camp tile
                 const angle = index * 137.5; 
                 const radius = 15 + (index % 5) * 8; // Tighter radius to fit in the camp
@@ -826,6 +825,7 @@ const draw = () => {
                 const startX = armyPx + tileSize/2 - ((troopSprites.length - 1) * spacing) / 2;
                 
                 troopSprites.forEach((troop, index) => {
+                    if (!ctx) return;
                     const iconX = startX + index * spacing - 20;
                     
                     ctx.fillStyle = 'rgba(0,0,0,0.4)';
