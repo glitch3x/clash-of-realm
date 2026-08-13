@@ -1,0 +1,7 @@
+[package]
+name = "solana_kingdom"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bolt-lang = "0.1" # Example Bolt ECS dependency
