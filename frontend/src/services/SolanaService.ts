@@ -332,16 +332,8 @@ class SolanaService {
             const dy = player.cityY - ai.cityY;
             const distToPlayer = Math.sqrt(dx*dx + dy*dy);
             if (distToPlayer > 10) {
-                // Teleport AI to 3 tiles right of the player
-                ai.cityX = Math.min(95, player.cityX + 3);
-                ai.cityY = player.cityY;
-                if (!ai.isMarching) {
-                    ai.x = ai.cityX;
-                    ai.y = ai.cityY;
-                }
-                
-                // Re-claim the tile for the AI
-                this.claimedTiles[`${ai.cityX},${ai.cityY}`] = ai.pubkey;
+                // We'll leave the AI where it is instead of constantly teleporting it to the player.
+                // ai.cityX = Math.min(95, player.cityX + 3);
             }
         }
 
@@ -473,7 +465,8 @@ class SolanaService {
         if (!ai) return;
 
         // AI Cheats: Instantly generate troops for a challenge!
-        if (Math.random() < 0.5) { // 50% chance on AI tick to spawn free soldiers
+        // 5% chance on AI tick to spawn free soldiers
+        if (Math.random() < 0.05) { 
             ai.army.soldier += 1;
         }
 
@@ -483,8 +476,8 @@ class SolanaService {
             // Find a player to attack
             const player = this.localEntities.find(e => e.isPlayer);
             if (player) {
-                // 50% chance per bot tick to launch an attack if they have enough troops
-                if (Math.random() < 0.5) {
+                // 1% chance per bot tick to launch an attack if they have enough troops
+                if (Math.random() < 0.01) {
                     console.log(`[AI] Rival Kingdom is launching a counter-attack on the player!`);
                     this.marchEntity(ai.pubkey, player.cityX, player.cityY);
                 }
